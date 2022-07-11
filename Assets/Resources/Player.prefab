@@ -885,7 +885,11 @@ MonoBehaviour:
   moveSpeed: 10
   damping: 10
   fireRate: 0.3
-  joystick: {fileID: 0}
+  stick: []
+  gyro: {x: 0, y: 0, z: 0}
+  accel: {x: 0, y: 0, z: 0}
+  jc_ind: 0
+  orientation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!114 &8729554342534646789
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1091,6 +1095,7 @@ GameObject:
   - component: {fileID: 4526832042525068303}
   - component: {fileID: 4526832042526395513}
   - component: {fileID: 4526832042527493817}
+  - component: {fileID: 1456876498459860317}
   m_Layer: 0
   m_Name: Gun
   m_TagString: Untagged
@@ -1164,6 +1169,23 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &1456876498459860317
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4526832042525560879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 368694df7eebe40f884aacba61b48e52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stick: []
+  gyro: {x: 0, y: 0, z: 0}
+  accel: {x: 0, y: 0, z: 0}
+  jc_ind: 0
+  orientation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &4526832042525560881
 GameObject:
   m_ObjectHideFlags: 0

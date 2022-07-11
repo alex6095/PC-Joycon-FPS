@@ -16,9 +16,9 @@ public class Movement : MonoBehaviourPunCallbacks
     private new Camera camera;
 
     // 가상의 Plane에 레이캐스팅하기 위한 변수
-    private Plane plane;
-    private Ray ray;
-    private Vector3 hitPoint;
+    //private Plane plane;
+    //private Ray ray;
+    //private Vector3 hitPoint;
 
     // PhotonView 컴포넌트 캐시처리를 위한 변수
     private PhotonView pv;
@@ -41,8 +41,19 @@ public class Movement : MonoBehaviourPunCallbacks
     public float fireRate = 0.3F;
     private float nextFire = 0.0F;
 
-    public VirtualJoystick joystick;
-    private Image bgImg;
+    //public VirtualJoystick joystick;
+    //private Image bgImg;
+
+    private List<Joycon> joycons;
+
+    // Values made available via Unity
+    public float[] stick;
+    public Vector3 gyro;
+    public Vector3 accel;
+    public int jc_ind = 0;
+    public Quaternion orientation;
+
+    private Joycon j;
 
     void Start()
     {
@@ -52,12 +63,11 @@ public class Movement : MonoBehaviourPunCallbacks
         fire = GetComponent<Fire>();
 
         // Find joystick
-        GameObject tmp = GameObject.Find("BackgroundImage");
-        joystick = tmp.GetComponent<VirtualJoystick>();
 
-        bgImg = tmp.GetComponent<Image>();
+        //GameObject tmp = GameObject.Find("BackgroundImage");
+        //joystick = tmp.GetComponent<VirtualJoystick>();
 
-
+        //bgImg = tmp.GetComponent<Image>();
 
         //camera = Camera.main;
         
@@ -70,9 +80,25 @@ public class Movement : MonoBehaviourPunCallbacks
         // 추가 항목
         m_fMouseX = 0f;
 
-        
+
         // 가상의 바닥을 주인공의 위치를 기준으로 생성
-        plane = new Plane(transform.up, transform.position);
+        //plane = new Plane(transform.up, transform.position);
+
+
+        // Joycon Values
+        gyro = new Vector3(0, 0, 0);
+        accel = new Vector3(0, 0, 0);
+        // get the public Joycon array attached to the JoyconManager in scene
+        joycons = JoyconManager.Instance.j;
+        if (joycons.Count < jc_ind + 1)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            j = joycons[jc_ind];   
+        }
+
     }
 
     void Update()
@@ -80,15 +106,24 @@ public class Movement : MonoBehaviourPunCallbacks
         // 자신이 생성한 네트워크 객체만 컨트롤
         if (pv.IsMine)
         {
-            Move();
-            Turn();
-            Shoot();
+            if (joycons.Count > 0)
+            {
+                
+
+                Move();
+                // VR은 Turn 필요없음
+                //Turn();
+                Shoot();
+            }
         }
     }
 
     // 조이스틱 입력값 연결
-    float h => joystick.Horizontal();
-    float v => joystick.Vertical();
+    //float h => joystick.Horizontal();
+    //float v => joystick.Vertical();
+
+    float h => j.GetStick()[0]; // X : -1 ~ 1
+    float v => j.GetStick()[1]; // Y : -1 ~ 1
 
     // 이동 처리하는 함수
     void Move()
@@ -137,12 +172,12 @@ public class Movement : MonoBehaviourPunCallbacks
                     //영역 밖일 때만
                     //Debug.Log(bgImg.rectTransform.anchoredPosition+", "+ joystickImg.rectTransform.anchoredPosition);
                     //Vector2 pos;
-                    //if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(bgImg.rectTransform, touch.position-touch.deltaPosition, camera, out pos))
-                    //{
+                    if (h == 0 && v == 0)
+                    {
                         m_fMouseX += touch.deltaPosition.x;
                         transform.localRotation = Quaternion.Euler(0, m_fMouseX, 0);
 
-                    //}
+                    }
                     //Debug.Log(touch.rawPosition);
                 }
             }
@@ -153,27 +188,35 @@ public class Movement : MonoBehaviourPunCallbacks
     }
     void Shoot()
     {
-        if (pv.IsMine)
-        {
-            if (Input.touchCount > 0)
-            {
-                foreach (Touch touch in Input.touches)
-                {
-                    if (touch.phase != TouchPhase.Moved && Time.time > nextFire)
-                    {
-                        //Vector2 pos;
-                        //if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(bgImg.rectTransform, touch.position - touch.deltaPosition, camera, out pos))
-                        //{
-                            // Began
-                            nextFire = Time.time + fireRate;
+        //if (Input.touchCount > 0)
+        //{
+        //    foreach (Touch touch in Input.touches)
+        //    {
+        //        if (touch.phase != TouchPhase.Moved && Time.time > nextFire)
+        //        {
+        //            //Vector2 pos;
+        //            if (h == 0 && v == 0)
+        //            {
+        //                // Began
+        //                nextFire = Time.time + fireRate;
 
-                            fire.FireBullet(pv.Owner.ActorNumber);
-                            //RPC로 원격지에 있는 함수를 호출
-                            pv.RPC("FireBullet", RpcTarget.Others, pv.Owner.ActorNumber);
-                        //}
-                    }
-                }
-            }
+        //                fire.FireBullet(pv.Owner.ActorNumber);
+        //                //RPC로 원격지에 있는 함수를 호출
+        //                pv.RPC("FireBullet", RpcTarget.Others, pv.Owner.ActorNumber);
+        //            }
+        //        }
+        //    }
+        //}
+
+        if (j.GetButtonDown(Joycon.Button.SHOULDER_2))
+        {
+            // Began
+            nextFire = Time.time + fireRate;
+
+            fire.FireBullet(pv.Owner.ActorNumber);
+            //RPC로 원격지에 있는 함수를 호출
+            pv.RPC("FireBullet", RpcTarget.Others, pv.Owner.ActorNumber);
         }
+        
     }
 }
