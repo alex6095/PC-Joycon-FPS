@@ -79,7 +79,9 @@ public class JoyconDemo : MonoBehaviour {
 				gameObject.GetComponent<Renderer>().material.color = Color.blue;
 			}
             gameObject.transform.rotation = orientation;
-			Debug.Log(gameObject.transform.GetChild(0).transform.position);
+			gameObject.transform.Rotate(90, 0, 0, Space.World);
+
+			//Debug.Log(gameObject.transform.GetChild(0).transform.position);
 			//Debug.Log("Gameobject of Gun : " + gameObject);
         }
     }
