@@ -19,6 +19,7 @@ public class Bullet : MonoBehaviour
     {
         // 충돌 지점 추출
         var contact = coll.GetContact(0);
+        Debug.Log("##### Collide with bullet : " + coll.gameObject.name);
         // 충돌 지점에 스파크 이펙트 생성
         var obj = Instantiate(effect,
                               contact.point,
