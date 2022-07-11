@@ -210,6 +210,7 @@ public class Movement : MonoBehaviourPunCallbacks
 
         if (j.GetButtonDown(Joycon.Button.SHOULDER_2))
         {
+            j.SetRumble(160, 320, 0.6f, 200);
             // Began
             nextFire = Time.time + fireRate;
 
