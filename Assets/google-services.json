@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "925759802710",
+    "project_id": "vr-fps-64678",
+    "storage_bucket": "vr-fps-64678.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:925759802710:android:924fa25078693510045af7",
+        "android_client_info": {
+          "package_name": "com.madcamp.classroombreak"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "925759802710-73c0foaemu95cvupdeoevq858d1min2f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIPdZ-n5SSSBcuK-whAZkqO5YAAYWhi60"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "925759802710-73c0foaemu95cvupdeoevq858d1min2f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
